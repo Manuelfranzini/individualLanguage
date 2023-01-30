@@ -1,0 +1,103 @@
+package GUI;
+
+import java.util.*; 
+
+// @purpose of usage:
+//      iconography,
+//      language adaption, 
+//      mood adaption, 
+//      framing tendency adaption, 
+
+//  @usage:
+//      The index of an array list is a given version like the language or wording of a basic expression
+//      Use the basic expression as keyword which shall focus on meaning
+//      Use keyword to implement in GUI
+//      In user data store languae and use it as refference when iterating the maps.
+
+public class Linguistic
+{
+    // A collection of icon references for dynamic iconography
+    private HashMap<String, String> iconLibrary = new HashMap<String, String>();
+
+    // A collection of expressions "Notifications, Requests, Titles, Contracts"
+    // <String = expressionKey, ArrayList< [0]=english, [1]=german,...>>
+    private HashMap<String, String[]> library = new HashMap<String, String[]>();
+
+    // A collection of languages with keys where the key determines the index of the language adapted epression
+    // <String=language, Integer=index refference>
+    private HashMap<String, Integer> language = new HashMap<String, Integer>();
+    int newLanguageAmount = 0;
+
+    public Linguistic()
+    {
+        // initialise instance variables
+    }
+
+    // Add language
+    public void addLanguage(String Language)
+    {
+        // create language
+        if(language.containsKey(Language) != true){
+            language.put(Language, newLanguageAmount);
+        }
+
+        // update library
+        for(String x:library.keySet()){
+            // create and upddate new array
+            String[] firstArray = library.get(x);
+            String[] secondArray = {null};
+            int fal = firstArray.length; 
+            int sal = secondArray.length;
+            String[] result = new String[fal + sal];
+            System.arraycopy(firstArray, 0, result, 0, fal);  
+            System.arraycopy(secondArray, 0, result, fal, sal);  
+
+            // insert new array
+            library.replace(x, result);
+        }
+
+        newLanguageAmount++;
+    }
+
+    // Add new expression with expression & language as parameter
+    public void setLanguageExpression(String expressionKey, String newExpression, String Language)
+    {
+        // see if language exists
+        if(language.containsKey(Language) == true){
+            // set expression
+            String[] newArray = library.get(expressionKey);
+            newArray[language.get(Language)] = newExpression;
+            library.replace(expressionKey, newArray);
+        }
+    }
+
+    // Create expression
+    public void setExpressionKey(String expressionKey)
+    {
+        // set expression
+        if(library.containsKey(expressionKey) != true){
+            library.put(expressionKey, new String[newLanguageAmount]);
+        }
+    }
+
+    // Get one expression by language & expression key
+    public String getExpression(String Language, String expressionKey)
+    {
+        // return value by language & expressionKey
+        if(library.get(expressionKey)[language.get(Language)] != null){
+            return library.get(expressionKey)[language.get(Language)];
+        }
+        return null;
+    }
+
+    // Create expression
+    public void test()
+    {
+        System.out.print("library = ");
+        for(String x:library.keySet()){
+            System.out.println(""+x+"="+Arrays.toString(library.get(x)));
+        }
+
+        System.out.println("language = "+language);
+    }
+}
